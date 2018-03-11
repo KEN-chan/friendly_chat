@@ -2,16 +2,23 @@ import 'package:flutter/material.dart';
 
 class ChatMessage extends StatelessWidget {
 
-  ChatMessage({ this.text, this.senderName });
+  ChatMessage({ this.text, this.senderName, this.animationController });
 
   final String text;
   final String senderName;
+  final AnimationController animationController;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0),
-      child: buildChatMessageBody(context),
+    return SizeTransition(
+      sizeFactor: CurvedAnimation(
+        parent: animationController, curve: Curves.easeOut,
+      ),
+      axisAlignment: 0.0,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 10.0),
+        child: buildChatMessageBody(context),
+      ),
     );
   }
 
@@ -35,15 +42,17 @@ class ChatMessage extends StatelessWidget {
 
   Widget buildTextContainer(BuildContext context) {
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(senderName, style: Theme.of(context).textTheme.subhead),
-        Container(
-          margin: EdgeInsets.only(top: 5.0),
-          child: Text(text),
-        ),
-      ],
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(senderName, style: Theme.of(context).textTheme.subhead),
+          Container(
+            margin: EdgeInsets.only(top: 5.0),
+            child: Text(text),
+          ),
+        ],
+      ),
     );
   }
 }

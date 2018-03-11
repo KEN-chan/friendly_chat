@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/chat_message.dart';
+import 'package:flutter/cupertino.dart';
 
 class ChatScreen extends StatefulWidget {
 
@@ -9,18 +10,29 @@ class ChatScreen extends StatefulWidget {
   }
 }
 
-class ChatScreenState extends State<ChatScreen> {
+class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   final List<ChatMessage> messages = <ChatMessage>[];
   final TextEditingController textController = new TextEditingController();
+  bool isComposing = false;
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(title: Text("Friendly Chat")),
+      appBar: AppBar(
+        title: Text("Friendly Chat"),
+        elevation: Theme.of(context).platform == TargetPlatform.iOS ? 1.0 : 4.0,
+      ),
       body: buildBody(context),
     );
+  }
+
+  @override 
+  void dispose() {
+    for (ChatMessage message in messages)
+      message.animationController.dispose();
+    super.dispose();
   }
 
   Widget buildBody(BuildContext context) {
@@ -57,37 +69,84 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   Widget buildTextComposer(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
-      child: Row(
-        children: <Widget>[
-          Flexible(
-            child: TextField(
-              controller: textController,
-              onSubmitted: handleSubmitted,
-              decoration: InputDecoration.collapsed(hintText: "Send a message"),
+    return new IconTheme(
+      data: new IconThemeData(color: Theme.of(context).accentColor),
+      child: new Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: new Row(
+          children: <Widget>[
+            new Flexible(
+              child: new TextField(
+                controller: textController,
+                onChanged: handleChanged,
+                onSubmitted: handleSubmitted,
+                decoration: new InputDecoration.collapsed(hintText: "Send a message"),
+                maxLines: 2,
+              ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 4.0),
-            child: IconButton(
-              icon: Icon(Icons.send),
-              color: Theme.of(context).accentColor,
-              onPressed: () => handleSubmitted(textController.text) ,
+            new Container(
+              margin: new EdgeInsets.symmetric(horizontal: 4.0),
+              child: buildIconButton(context),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
 
+  Widget buildIconButton(BuildContext context) {
+
+    return Theme.of(context).platform == TargetPlatform.iOS ? buildIOSButton() : buildAndroidButton();
+  }
+
+  Widget buildIOSButton() {
+
+    return CupertinoButton(
+      child: Text('Send'),
+      onPressed: onPressed(),
+    );
+  }
+
+  Widget buildAndroidButton() {
+
+    return IconButton(
+      icon: Icon(Icons.send),
+      onPressed: onPressed(),
+    );
+  }
+
+  onPressed() {
+
+     return isComposing
+        ? () => handleSubmitted(textController.text)
+        : null;
+  }
+
+  handleChanged(String text) {
+
+    setState(() {
+      isComposing = text.length > 0;
+    });
+  }
+
   handleSubmitted(String text) {
+
+    if (!isComposing) return;
+
     textController.clear();
 
-    var message = ChatMessage(text: text, senderName: "Kenta");
+    var message = ChatMessage(
+      text: text,
+      senderName: "Kenta",
+      animationController: AnimationController(
+        duration: Duration(milliseconds: 300),
+        vsync: this,
+      ),
+    );
     setState(() {
+      isComposing = false;
       messages.insert(0, message);
     });
-
+    message.animationController.forward();
   }
 }

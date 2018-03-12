@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 
 class ChatMessage extends StatelessWidget {
 
@@ -36,7 +37,7 @@ class ChatMessage extends StatelessWidget {
   Widget buildAvatar() {
     return Container(
       margin: EdgeInsets.only(right: 16.0),
-      child: CircleAvatar(child: Text(senderName[0])),
+      child: CircleAvatar(backgroundImage: NetworkImage(googleSignIn.currentUser.photoUrl)),
     );
   }
 

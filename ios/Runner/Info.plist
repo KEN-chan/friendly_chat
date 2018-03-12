@@ -20,6 +20,20 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>CFBundleURLTypes</key>
+      <array>
+          <dict>
+             <key>CFBundleTypeRole</key>
+             <string>Editor</string>
+             <key>CFBundleURLSchemes</key>
+             <array>
+             <!-- reverse url of your client id, for example: -->
+                <string>com.googleusercontent.apps.625347345532-susv3ufmvbiocucnqp5dnlgvgfvgbfo4</string>
+             <!-- bundle id, for example: -->
+                <string>com.harakenta.friendlyChat</string>
+             </array>
+          </dict>
+      </array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "625347345532",
+    "firebase_url": "https://friendlychat-e268d.firebaseio.com",
+    "project_id": "friendlychat-e268d",
+    "storage_bucket": "friendlychat-e268d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625347345532:android:c6531c9b8425958c",
+        "android_client_info": {
+          "package_name": "com.harakenta.friendlychat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "625347345532-g8k74hrjjplekiij2nfe7hl47s3fdrv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQgyhYQSiYpDsLX5J05cGlqGRztxZHyDM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

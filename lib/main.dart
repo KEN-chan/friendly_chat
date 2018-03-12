@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'screens/chat_screen.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final FirebaseAuth auth = FirebaseAuth.instance;
+
+final googleSignIn = new GoogleSignIn();
 
 void main() {
 
@@ -31,5 +38,26 @@ class FriendlychatApp extends StatelessWidget {
           : kDefaultTheme,                                         //new
       home: ChatScreen(),
     );
+  }
+}
+
+//Future<Null> ensureLoggedIn() async {
+//  GoogleSignInAccount user = googleSignIn.currentUser;
+//  if (user == null) {
+//    print("come null1");
+//    user = await googleSignIn.signInSilently();
+//  }
+//  if (user == null) {
+//    print("come null2");
+//    await googleSignIn.signIn();
+//  }
+//}
+
+Future<Null> ensureLoggedIn() async {
+  GoogleSignInAccount user =  await googleSignIn.currentUser;
+  if (user == null)
+    user = await googleSignIn.signInSilently();
+  if (user == null) {
+    user = await googleSignIn.signIn();
   }
 }

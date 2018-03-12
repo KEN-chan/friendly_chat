@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/chat_message.dart';
 import 'package:flutter/cupertino.dart';
+import 'dart:async';
+import '../main.dart';
 
 class ChatScreen extends StatefulWidget {
 
@@ -28,7 +30,7 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     );
   }
 
-  @override 
+  @override
   void dispose() {
     for (ChatMessage message in messages)
       message.animationController.dispose();
@@ -129,22 +131,30 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     });
   }
 
-  handleSubmitted(String text) {
+  Future<Null> handleSubmitted(String text) async {
 
     if (!isComposing) return;
 
     textController.clear();
 
-    var message = ChatMessage(
+    setState(() {
+      isComposing = false;
+    });
+
+    await ensureLoggedIn();
+    sendMessage(text: text);
+  }
+
+  void sendMessage({ String text }) {
+    ChatMessage message = new ChatMessage(
       text: text,
-      senderName: "Kenta",
-      animationController: AnimationController(
-        duration: Duration(milliseconds: 300),
+      senderName: googleSignIn.currentUser.displayName,
+      animationController: new AnimationController(
+        duration: new Duration(milliseconds: 700),
         vsync: this,
       ),
     );
     setState(() {
-      isComposing = false;
       messages.insert(0, message);
     });
     message.animationController.forward();
